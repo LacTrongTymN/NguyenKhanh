@@ -138,7 +138,7 @@ public class QuanLyDangNhap extends JFrame implements ActionListener {
 
                        
                         this.setVisible(false);
-                        new view(); 
+                        new GiaoDienQuanLy (); 
                     } else {
                         res.setText("Email hoặc mật khẩu không đúng.");
                     }
