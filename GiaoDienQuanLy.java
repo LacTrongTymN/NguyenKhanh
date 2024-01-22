@@ -37,7 +37,7 @@ public class GiaoDienQuanLy {
             e.printStackTrace();
             System.out.println("Không thể kết nối đến cơ sở dữ liệu!");
         }
-        SwingUtilities.invokeLater(view::new);
+        SwingUtilities.invokeLater(GiaoDienQuanLy::new);
     }
     
     private void luutruhoso() {
