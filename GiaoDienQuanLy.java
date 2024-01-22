@@ -1,8 +1,8 @@
 package benhan;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,7 +22,7 @@ public class GiaoDienQuanLy {
         String userName = "anhlonx";
         String password = "Hnk180705@";
 
-        // URL kết nối cho MySQL
+        
         String url = "jdbc:mysql://localhost:3306/QLBENHAN";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -41,23 +41,16 @@ public class GiaoDienQuanLy {
     }
     
     private void luutruhoso() {
-        // Kết nối đến MySQL
+        
         String connectionUrl = "jdbc:mysql://localhost:3306/QLBENHAN";
         String userName = "anhlonx";
         String password = "Hnk180705@";
 
-        try (Connection connection = DriverManager.getConnection(connectionUrl, userName, password)) {
-            // Câu truy vấn SQL để lấy dữ liệu từ bảng Patients
+        try (Connection connection = DriverManager.getConnection(connectionUrl, userName, password)) {            
             String sql = "SELECT * FROM Patients";
-
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                // Thực hiện câu truy vấn SELECT
-                var resultSet = preparedStatement.executeQuery();
-
-                // Xóa dữ liệu hiện tại trên bảng
-                model.setRowCount(0);
-
-                // Duyệt qua kết quả và thêm vào bảng
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {                
+                var resultSet = preparedStatement.executeQuery();           
+                model.setRowCount(0);               
                 while (resultSet.next()) {
                     String patientID = resultSet.getString("PatientID");
                     String name = resultSet.getString("Name");
@@ -75,11 +68,9 @@ public class GiaoDienQuanLy {
         }
     }
     public GiaoDienQuanLy() {
-        initialize();
-     // Thêm dòng sau khi khởi tạo model trong phương thức initialize()
+        initialize();    
         model = (DefaultTableModel) table.getModel();
-
-        // Gọi phương thức để tải dữ liệu từ MySQL khi khởi động ứng dụng
+       
         luutruhoso();
     }
 
@@ -168,8 +159,7 @@ public class GiaoDienQuanLy {
         gbc.gridx = 0;
         gbc.gridy = 2;
         functionPanel.add(editButton, gbc);
-
-        // Add addButton and removeButton only once
+        
         GridBagConstraints gbcAddButton = new GridBagConstraints();
         gbcAddButton.fill = GridBagConstraints.HORIZONTAL;
         gbcAddButton.insets = new Insets(5, 5, 5, 5);
@@ -224,7 +214,6 @@ public class GiaoDienQuanLy {
     	        !gender.isEmpty() && !phoneNumber.isEmpty() && !healthStatus.isEmpty()) {
     	        model.addRow(new Object[]{patientID, name, age, gender, phoneNumber, healthStatus});
     	        
-    	        // Gọi hàm để chèn dữ liệu vào MySQL
     	        insertpatient(patientID, name, age, gender, phoneNumber, healthStatus);
 
     	        addIdField.setText("");
@@ -237,24 +226,19 @@ public class GiaoDienQuanLy {
     	        JOptionPane.showMessageDialog(frame, "Vui lòng điền đầy đủ thông tin bệnh nhân.");
     	    }
     	}
-    	private void deletePatientFromDatabase(String patientID) {
-    	    // Kết nối đến MySQL
+    	private void deletePatientFromDatabase(String patientID) {   	  
     	    String connectionUrl = "jdbc:mysql://localhost:3306/QLBENHAN";
     	    String userName = "anhlonx";
     	    String password = "Hnk180705@";
 
     	    try (Connection connection = DriverManager.getConnection(connectionUrl, userName, password)) {
-    	        // Câu truy vấn SQL để xóa bệnh nhân
     	        String sql = "DELETE FROM Patients WHERE PatientID = ?";
 
     	        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-    	            // Đặt giá trị cho tham số trong câu truy vấn DELETE
     	            preparedStatement.setString(1, patientID);
 
-    	            // Thực hiện câu truy vấn DELETE
     	            int rows = preparedStatement.executeUpdate();
 
-    	            // Kiểm tra xem có bản ghi nào bị xóa không
     	            if (rows > 0) {
     	                System.out.println("Đã xóa bệnh nhân khỏi cơ sở dữ liệu.");
     	            } else {
@@ -273,13 +257,10 @@ public class GiaoDienQuanLy {
     	private void removePatient() {
     	int selectedRow = table.getSelectedRow();
         if (selectedRow != -1) {
-            // Lấy giá trị Số ID bệnh nhân từ dòng đã chọn
             String patientID = model.getValueAt(selectedRow, 0).toString();
 
-            // Gọi phương thức để xóa bệnh nhân từ MySQL
             deletePatientFromDatabase(patientID);
 
-            // Xóa dòng từ bảng
             model.removeRow(selectedRow);
         } else {
             JOptionPane.showMessageDialog(frame, "Vui lòng chọn bệnh nhân cần xóa.");
@@ -310,17 +291,14 @@ public class GiaoDienQuanLy {
         table.setModel(searchModel);
     }
     	private void insertpatient(String patientID, String name, String age, String gender, String phoneNumber, String healthStatus) {
-        // Kết nối đến MySQL
         String connectionUrl = "jdbc:mysql://localhost:3306/QLBENHAN";
         String userName = "anhlonx";
         String password = "Hnk180705@";
 
         try (Connection connection = DriverManager.getConnection(connectionUrl, userName, password)) {
-            // Câu truy vấn SQL để chèn dữ liệu
             String sql = "INSERT INTO Patients (PatientID, Name, Age, Gender, PhoneNumber, HealthStatus) VALUES (?, ?, ?, ?, ?, ?)";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                // Đặt giá trị cho các tham số trong câu truy vấn
                 preparedStatement.setString(1, patientID);
                 preparedStatement.setString(2, name);
                 preparedStatement.setString(3, age);
@@ -328,10 +306,8 @@ public class GiaoDienQuanLy {
                 preparedStatement.setString(5, phoneNumber);
                 preparedStatement.setString(6, healthStatus);
 
-                // Thực hiện câu truy vấn INSERT
                 preparedStatement.executeUpdate();
 
-                // Hiển thị thông báo nếu chèn thành công
                 JOptionPane.showMessageDialog(frame, "Đã thêm bệnh nhân vào cơ sở dữ liệu.");
             }
         } catch (SQLException e) {
@@ -390,7 +366,6 @@ public class GiaoDienQuanLy {
                     model.setValueAt(newPhoneNumber, selectedRow, 4);
                     model.setValueAt(newHealthStatus, selectedRow, 5);
 
-                    // Cập nhật dữ liệu trong cơ sở dữ liệu
                     updatepatient(patientID, newPatientID, newName, newAge, newGender, newPhoneNumber, newHealthStatus);
                 }
             }
@@ -404,11 +379,8 @@ public class GiaoDienQuanLy {
         String password = "Hnk180705@";
 
         try (Connection connection = DriverManager.getConnection(connectionUrl, userName, password)) {
-            // Câu lệnh SQL UPDATE
             String query = "UPDATE Patients SET PatientID=?, Name=?, Age=?, Gender=?, PhoneNumber=?, HealthStatus=? WHERE PatientID=?";
-            //PreparedStatement giúp tăng hiệu suất của ứng dụng bởi vì câu truy vấn chỉ được biên dịch một lần.
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                // Đặt giá trị cho các tham số trong câu lệnh UPDATE
                 preparedStatement.setString(1, newPatientID);
                 preparedStatement.setString(2, newName);
                 preparedStatement.setString(3, newAge);
@@ -416,11 +388,8 @@ public class GiaoDienQuanLy {
                 preparedStatement.setString(5, newPhoneNumber);
                 preparedStatement.setString(6, newHealthStatus);
                 preparedStatement.setString(7, oldPatientID);
-
-                // Thực hiện câu lệnh UPDATE
                 int rows = preparedStatement.executeUpdate();
 
-                // Kiểm tra xem có bản ghi nào bị ảnh hưởng không
                 if (rows > 0) {
                     System.out.println("Đã cập nhật thông tin bệnh nhân trong cơ sở dữ liệu.");
                 } else {

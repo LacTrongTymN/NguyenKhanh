@@ -136,9 +136,9 @@ public class QuanLyDangNhap extends JFrame implements ActionListener {
                     if (validateLogin(email, password)) {
                         res.setText("Đăng nhập thành công.");
 
-                        // Ẩn DoctorSignUpForm và hiển thị view
+                       
                         this.setVisible(false);
-                        new view(); // Tạo và hiển thị giao diện view
+                        new view(); 
                     } else {
                         res.setText("Email hoặc mật khẩu không đúng.");
                     }
@@ -168,7 +168,7 @@ public class QuanLyDangNhap extends JFrame implements ActionListener {
                 preparedStatement.setString(2, password);
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    // Kiểm tra nếu có ít nhất một bản ghi trùng khớp
+                    
                     return resultSet.next();
                 }
             }
@@ -179,7 +179,7 @@ public class QuanLyDangNhap extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new DoctorSignUpForm();
+        new QuanLyDangNhap();
     }
 }
 
